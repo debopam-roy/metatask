@@ -2,9 +2,16 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import ThemeToggle from '../components/ThemeToggle';
 import { useTheme } from '../context/ThemeContext';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 export default function Home() {
   const { isDarkMode } = useTheme();
@@ -15,16 +22,24 @@ export default function Home() {
     setIsVisible(true);
   }, []);
 
+  // Smooth scroll function
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <div className='flex flex-col h-screen'>
+      <div id="home" className='flex flex-col h-screen'>
         <header className="w-full py-4 px-6 md:px-12 flex items-center justify-between bg-light-100 dark:bg-dark-800 transition-colors duration-300">
           <div className="flex items-center">
-            <div className="h-10 w-10 rounded-full bg-primary-800 dark:bg-primary-700 flex items-center justify-center">
-              <span className="text-lg font-bold text-light-100">M</span>
-            </div>
-            <span className="ml-3 text-xl font-bold text-primary-800 dark:text-light-100">MetaTask</span>
+          <a href="#"><span className="ml-3 text-xl font-bold text-primary-800 dark:text-light-100">MetaTask</span></a>
           </div>
           
           <nav className="hidden md:flex items-center space-x-8">
@@ -65,18 +80,18 @@ export default function Home() {
                 We connect talented professionals with innovative projects worldwide through a secure, transparent, and efficient platform powered by blockchain technology and artificial intelligence.
               </p>
               <div className="mt-8 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                <a 
-                  href="#how-it-works" 
+                <button 
+                  onClick={() => scrollToSection('how-it-works')}
                   className="px-8 py-3 rounded-full bg-primary-800 dark:bg-primary-700 text-light-100 font-medium text-center hover:bg-primary-700 dark:hover:bg-primary-600 transform hover:scale-105 transition-all duration-300"
                 >
-            Get Started
-                </a>
-                <a 
-                  href="#features" 
+                  Get Started
+                </button>
+                <button 
+                  onClick={() => scrollToSection('features')}
                   className="px-8 py-3 rounded-full bg-light-300 dark:bg-dark-600 text-primary-800 dark:text-light-100 font-medium text-center hover:bg-light-400 dark:hover:bg-dark-500 transform hover:scale-105 transition-all duration-300"
                 >
                   Learn More
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -88,8 +103,9 @@ export default function Home() {
                 src="/images/hero_image.png" 
                 alt="MetaTask Platform" 
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover"
-                priority
+                loading="eager"
               />
             </div>
           </div>
@@ -97,7 +113,7 @@ export default function Home() {
       </div>
 
       {/* Features Section */}
-      <div id="features" className="h-screen py-16 bg-light-200 dark:bg-dark-900 transition-colors duration-300">
+      <div id="features" className="min-h-screen py-16 bg-light-200 dark:bg-dark-900 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:text-center">
             <h2 className="text-base text-secondary-600 font-semibold tracking-wide uppercase">Features</h2>
@@ -110,61 +126,158 @@ export default function Home() {
           </div>
 
           <div className="mt-16">
-            <div className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
               {[
                 {
                   title: "Blockchain Security",
                   description: "Smart contracts ensure secure payments and protect both clients and freelancers with transparent transactions.",
+                  highlight: "99.9% Secure",
+                  stats: "256-bit encryption",
+                  color: "from-blue-500 to-indigo-600",
                   icon: (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                     </svg>
                   )
                 },
                 {
                   title: "AI-Powered Matching",
                   description: "Our advanced AI algorithms match freelancers with projects that perfectly align with their skills and experience.",
+                  highlight: "95% Match Rate",
+                  stats: "Neural networks",
+                  color: "from-purple-500 to-pink-600",
                   icon: (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
                   )
                 },
                 {
                   title: "Instant Payments",
                   description: "Get paid instantly upon project completion with our blockchain-based payment system, eliminating delays.",
+                  highlight: "< 30 seconds",
+                  stats: "Average payout time",
+                  color: "from-green-500 to-emerald-600",
                   icon: (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   )
                 },
                 {
                   title: "Decentralized Reviews",
                   description: "Transparent and tamper-proof review system ensures honest feedback and builds trust in the community.",
+                  highlight: "100% Transparent",
+                  stats: "Immutable records",
+                  color: "from-orange-500 to-red-600",
                   icon: (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                   )
                 }
               ].map((feature, index) => (
                 <div 
                   key={index} 
-                  className={`relative p-6 rounded-lg border border-light-400 dark:border-dark-600 bg-light-100 dark:bg-dark-700 shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-                  style={{ transitionDelay: `${index * 100}ms` }}
+                  className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br from-light-50 to-light-100 dark:from-dark-800 dark:to-dark-700 border border-light-300 dark:border-dark-600 shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+                  style={{ transitionDelay: `${index * 150}ms` }}
                 >
-                  <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-primary-800 dark:bg-primary-700 text-light-100">
-                    {feature.icon}
+                  {/* Gradient Overlay */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}></div>
+                  
+                  {/* Decorative Elements */}
+                  <div className="absolute top-0 right-0 w-32 h-32 transform translate-x-16 -translate-y-16">
+                    <div className={`w-full h-full rounded-full bg-gradient-to-br ${feature.color} opacity-10 group-hover:opacity-20 transition-opacity duration-500`}></div>
                   </div>
-                  <div className="ml-16">
-                    <h3 className="text-lg leading-6 font-medium text-primary-800 dark:text-light-100">{feature.title}</h3>
-                    <p className="mt-2 text-base text-primary-600 dark:text-light-300">
-                      {feature.description}
-                    </p>
+                  
+                  <div className="relative p-8">
+                    {/* Header */}
+                    <div className="flex items-start justify-between mb-6">
+                      <div className={`flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                        <div className="text-white">
+                          {feature.icon}
+                        </div>
+                      </div>
+                      
+                      {/* Stats Badge */}
+                      <div className="text-right">
+                        <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r ${feature.color} text-white shadow-md`}>
+                          {feature.highlight}
+                        </div>
+                        <p className="text-xs text-primary-500 dark:text-light-400 mt-1">{feature.stats}</p>
+                      </div>
+                    </div>
+                    
+                    {/* Content */}
+                    <div className="space-y-4">
+                      <h3 className="text-xl font-bold text-primary-800 dark:text-light-100 group-hover:text-primary-900 dark:group-hover:text-white transition-colors duration-300">
+                        {feature.title}
+                      </h3>
+                      <p className="text-primary-600 dark:text-light-300 leading-relaxed">
+                        {feature.description}
+                      </p>
+                    </div>
+                    
+                    {/* Bottom Accent Line */}
+                    <div className="absolute bottom-0 left-0 right-0 h-1">
+                      <div className={`w-full h-full bg-gradient-to-r ${feature.color} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left`}></div>
+                    </div>
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* Mobile App Section */}
+            <div className="mt-16">
+              <div className={`relative overflow-hidden rounded-2xl bg-gradient-to-br from-light-50 to-light-100 dark:from-dark-800 dark:to-dark-700 border border-light-300 dark:border-dark-600 shadow-xl p-8 md:p-12 text-center ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '600ms' }}>
+                {/* Background Pattern */}
+                <div className="absolute inset-0 bg-gradient-to-r from-secondary-500/5 via-transparent to-primary-500/5"></div>
+                <div className="absolute top-0 right-0 w-64 h-64 transform translate-x-32 -translate-y-32">
+                  <div className="w-full h-full rounded-full bg-gradient-to-br from-secondary-400/10 to-primary-400/10"></div>
+                </div>
+                
+                <div className="relative z-10">
+                  <h3 className="text-2xl md:text-3xl font-bold text-primary-800 dark:text-light-100 mb-4">
+                    Take MetaTask <span className="text-secondary-600">Everywhere</span>
+                  </h3>
+                  <p className="text-lg text-primary-600 dark:text-light-300 mb-8 max-w-2xl mx-auto">
+                    You can also download our mobile application for seamless freelancing on the go. 
+                    It is available on both iOS and Android platforms.
+                  </p>
+                  
+                  {/* App Store Buttons */}
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <button className="group flex items-center px-6 py-3 bg-light-200 hover:bg-light-300 dark:bg-gray-900 dark:hover:bg-black text-primary-800 dark:text-light-100 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl min-w-[180px]">
+
+                      <svg className="w-8 h-8 mr-3" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                      </svg>
+                      <div className="text-left">
+                        <div className="text-xs opacity-75">Download on the</div>
+                        <div className="text-sm font-semibold">App Store</div>
+                      </div>
+                      <div className="ml-2 text-xs bg-secondary-600 hover:bg-secondary-700 text-white px-2 py-1 rounded-full opacity-75 group-hover:opacity-100 transition-all duration-300">
+                        Soon
+                      </div>
+                    </button>
+                    
+                    <button className="group flex items-center px-6 py-3 bg-light-200 hover:bg-light-300 dark:bg-gray-900 dark:hover:bg-black text-primary-800 dark:text-light-100 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl min-w-[180px]">
+                      <svg className="w-8 h-8 mr-3" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.16,10.81C20.5,11.08 20.75,11.5 20.75,12C20.75,12.5 20.53,12.9 20.18,13.18L17.89,14.5L15.39,12L17.89,9.5L20.16,10.81M6.05,2.66L16.81,8.88L14.54,11.15L6.05,2.66Z"/>
+                      </svg>
+                      <div className="text-left">
+                        <div className="text-xs opacity-75">Get it on</div>
+                        <div className="text-sm font-semibold">Google Play</div>
+                      </div>
+                      <div className="ml-2 text-xs bg-secondary-600 hover:bg-secondary-700 text-white px-2 py-1 rounded-full opacity-75 group-hover:opacity-100 transition-all duration-300">
+                        Soon
+                      </div>
+                    </button>
+                  </div>
+                  
+                  
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -269,99 +382,203 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Testimonial Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Sarah Johnson",
-                role: "UI/UX Designer",
-                image: "/images/testimonial1.png",
-                quote: "MetaTask has completely transformed how I find and manage freelance projects. The AI matching is spot-on, connecting me with clients who truly value my design expertise.",
-                rating: 5
-              },
-              {
-                name: "Michael Chen",
-                role: "Full Stack Developer",
-                image: "/images/testimonial2.png",
-                quote: "As a developer, I appreciate the blockchain payment system. It's fast, secure, and I never have to chase clients for payments anymore. The platform's transparency is unmatched.",
-                rating: 5
-              },
-              {
-                name: "Priya Patel",
-                role: "Content Strategist",
-                image: "/images/testimonial3.png",
-                quote: "The review system on MetaTask has helped me build credibility quickly. Clients can see my track record, and I can see theirs. It creates a level of trust that's rare in freelancing.",
-                rating: 4
-              },
-            ].map((testimonial, index) => (
-              <div 
-                key={index}
-                className={`bg-light-100 dark:bg-dark-700 rounded-xl p-8 shadow-lg relative transform transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} hover:shadow-xl`}
-                style={{ transitionDelay: `${index * 150}ms` }}
-              >
-                {/* Quote Icon */}
-                <div className="absolute top-6 right-6 text-primary-200 dark:text-dark-600">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                  </svg>
-                </div>
-                
-                {/* Testimonial Content */}
-                <div className="mb-6">
-                  <p className="text-primary-600 dark:text-light-300 italic">"{testimonial.quote}"</p>
-                </div>
-                
-                {/* Rating */}
-                <div className="flex mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <svg 
-                      key={i} 
-                      xmlns="http://www.w3.org/2000/svg" 
-                      className={`h-5 w-5 ${i < testimonial.rating ? 'text-secondary-600' : 'text-light-400 dark:text-dark-500'}`} 
-                      viewBox="0 0 20 20" 
-                      fill="currentColor"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                </div>
-                
-                {/* User Info */}
-                <div className="flex items-center">
-                  <div className="h-12 w-12 rounded-full bg-primary-100 dark:bg-dark-600 overflow-hidden flex items-center justify-center">
-                    {testimonial.image ? (
-                      <Image 
-                        src={testimonial.image} 
-                        alt={testimonial.name} 
-                        width={48} 
-                        height={48} 
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <span className="text-xl font-bold text-primary-800 dark:text-light-100">
-                        {testimonial.name.charAt(0)}
-                      </span>
-                    )}
+          {/* Testimonial Carousel */}
+          <div className="mt-12 relative testimonial-carousel">
+            <Swiper
+              modules={[Navigation, Pagination, Autoplay]}
+              spaceBetween={30}
+              slidesPerView={1}
+              breakpoints={{
+                640: {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                1024: {
+                  slidesPerView: 3,
+                  spaceBetween: 30,
+                },
+              }}
+              pagination={{ 
+                clickable: true,
+                bulletClass: 'swiper-pagination-bullet !bg-secondary-600 !opacity-70',
+                bulletActiveClass: 'swiper-pagination-bullet-active !bg-secondary-600 !opacity-100',
+                el: '.testimonial-pagination'
+              }}
+              navigation={{
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+              }}
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+              }}
+              loop={true}
+              className="pb-0"
+            >
+              {[{
+    name: "Sarah Johnson",
+    role: "UI/UX Designer",
+    image: "/images/testimonial1.png",
+    quote: "MetaTask has revolutionized my approach to freelance projects. Its precise AI matching has consistently connected me with clients who value high-quality design.",
+    rating: 5
+  },
+  {
+    name: "Michael Chen",
+    role: "Full Stack Developer",
+    image: "/images/testimonial2.png",
+    quote: "The blockchain-based payment system at MetaTask is exceptional. Payments are secure, prompt, and transparent, removing typical freelancing payment hassles entirely.",
+    rating: 5
+  },
+  {
+    name: "Priya Patel",
+    role: "Content Strategist",
+    image: "/images/testimonial3.png",
+    quote: "MetaTask's robust review mechanism has greatly enhanced my professional credibility, fostering mutual trust with clients in a uniquely transparent freelance environment.",
+    rating: 4
+  },
+  {
+    name: "David Rodriguez",
+    role: "Blockchain Developer",
+    image: "/images/testimonial4.jpg", // Temporary reuse
+    quote: "MetaTask’s smart contract infrastructure is outstanding. It seamlessly integrates with wallets and maintains rigorous security standards, perfectly aligning with blockchain development needs.",
+    rating: 5
+  },
+  {
+    name: "Emily Watson",
+    role: "Marketing Consultant",
+    image: "/images/testimonial5.jpg", // Temporary reuse
+    quote: "MetaTask transformed my freelancing experience by matching me with ideal marketing clients through intuitive AI recommendations, significantly expanding my business opportunities.",
+    rating: 5
+  },
+  {
+    name: "Alex Tanaka",
+    role: "Data Scientist",
+    image: "/images/testimonial6.jpg", // Temporary reuse
+    quote: "The freelancer analytics dashboard is a game changer—comprehensive, insightful, and essential for tracking performance metrics and optimizing client satisfaction effectively.",
+    rating: 4
+  }].map((testimonial, index) => (
+                <SwiperSlide key={index} className="pb-2">
+                  <div 
+                    className={`bg-white dark:bg-dark-700 rounded-xl p-8 shadow-lg relative transform transition-all duration-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} hover:shadow-xl h-full mb-8`}
+                  >
+                    {/* Quote Icon - Made smaller and positioned to avoid text overlap */}
+                    <div className="absolute top-6 right-6 text-primary-200/30 dark:text-dark-500/30">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                      </svg>
+                    </div>
+                    
+                    {/* Card with fixed height and consistent layout */}
+                    <div className="flex flex-col h-[320px]">
+                      {/* Testimonial Content - With fixed height and overflow handling */}
+                      <div className="flex-grow pr-12 overflow-hidden">
+                        <p className="text-primary-600 dark:text-light-300 leading-relaxed line-clamp-[8]">"{testimonial.quote}"</p>
+                      </div>
+                      
+                      {/* Bottom section with user info and rating - Always at bottom */}
+                      <div className="mt-auto pt-4">
+                        {/* Rating */}
+                        <div className="flex mb-4">
+                          {[...Array(5)].map((_, i) => (
+                            <svg 
+                              key={i} 
+                              xmlns="http://www.w3.org/2000/svg" 
+                              className={`h-5 w-5 ${i < testimonial.rating ? 'text-secondary-600' : 'text-light-400 dark:text-dark-500'}`} 
+                              viewBox="0 0 20 20" 
+                              fill="currentColor"
+                            >
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                          ))}
+                        </div>
+                        
+                        {/* User Info - Always at bottom with border */}
+                        <div className="flex items-center pt-4 border-t border-light-300 dark:border-dark-600">
+                          <div className="h-12 w-12 rounded-full bg-light-200 dark:bg-dark-600 overflow-hidden flex items-center justify-center shadow-sm">
+                            {testimonial.image ? (
+                              <Image 
+                                src={testimonial.image} 
+                                alt={testimonial.name} 
+                                width={48} 
+                                height={48} 
+                                className="h-full w-full object-cover"
+                              />
+                            ) : (
+                              <span className="text-xl font-bold text-primary-800 dark:text-light-100">
+                                {testimonial.name.charAt(0)}
+                              </span>
+                            )}
+                          </div>
+                          <div className="ml-4">
+                            <h4 className="text-lg font-semibold text-primary-800 dark:text-light-100">{testimonial.name}</h4>
+                            <p className="text-sm text-primary-600 dark:text-light-400">{testimonial.role}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="ml-4">
-                    <h4 className="text-lg font-medium text-primary-800 dark:text-light-100">{testimonial.name}</h4>
-                    <p className="text-sm text-primary-600 dark:text-light-400">{testimonial.role}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            
+            {/* Custom Navigation Buttons */}
+            <div className="swiper-button-prev !text-secondary-600 !opacity-70 hover:!opacity-100 !left-0 md:!left-[-20px] !after:text-lg"></div>
+            <div className="swiper-button-next !text-secondary-600 !opacity-70 hover:!opacity-100 !right-0 md:!right-[-20px] !after:text-lg"></div>
+            
+            {/* Custom pagination container outside of cards */}
+            <div className="testimonial-pagination !flex !justify-center !items-center !gap-2 !mt-4 !mb-2"></div>
           </div>
+          
+          {/* Custom styles for Swiper */}
+          <style jsx global>{`
+            .testimonial-pagination {
+              position: relative;
+              bottom: 0 !important;
+              width: 100%;
+              display: flex;
+              justify-content: center;
+              padding-top: 16px;
+            }
+            .swiper-pagination-bullet {
+              width: 10px;
+              height: 10px;
+              margin: 0 4px;
+              background-color: #cbd5e1;
+              opacity: 0.7;
+              transition: all 0.3s ease;
+            }
+            .swiper-pagination-bullet-active {
+              opacity: 1;
+              width: 12px;
+              height: 12px;
+            }
+            .swiper-button-prev, .swiper-button-next {
+              width: 40px !important;
+              height: 40px !important;
+              background-color: rgba(255, 255, 255, 0.9);
+              border-radius: 50%;
+              box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+              z-index: 10;
+            }
+            .dark .swiper-button-prev, .dark .swiper-button-next {
+              background-color: rgba(30, 41, 59, 0.9);
+            }
+            .swiper-button-prev:after, .swiper-button-next:after {
+              font-size: 18px !important;
+              font-weight: bold;
+            }
+            .swiper-wrapper {
+              padding-bottom: 20px;
+            }
+          `}</style>
           
           {/* Testimonial CTA */}
           <div className="mt-16 text-center">
             <p className="text-lg text-primary-600 dark:text-light-300 mb-6">
               Join thousands of satisfied freelancers and clients on our platform.
             </p>
-            <Link href="/signup" className="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-secondary-600 hover:bg-secondary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary-500 transform transition-all duration-300 hover:scale-105">
+            <Link href="/signup" className="px-8 py-4 bg-secondary-600 hover:bg-secondary-700 text-light-100 rounded-full font-medium text-lg shadow-lg hover:shadow-xl transform transition-all duration-300 hover:scale-105">
               Join Our Community
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
             </Link>
           </div>
         </div>
@@ -403,7 +620,7 @@ export default function Home() {
               },
               {
                 title: "Multi-Currency",
-                description: "Accept payments in ETH, USDC, and other major cryptocurrencies",
+                description: "Accept payments in major cryptocurrencies and fiat currencies",
                 icon: (
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -435,7 +652,7 @@ export default function Home() {
           </div>
 
           {/* Pricing Tiers */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
             {[
               {
                 name: "Freelancer",
@@ -450,7 +667,7 @@ export default function Home() {
                   "Community support"
                 ],
                 buttonText: "Start Freelancing",
-                popular: false
+                color: "from-blue-500 to-indigo-600"
               },
               {
                 name: "Professional",
@@ -466,7 +683,7 @@ export default function Home() {
                   "Custom portfolio showcase"
                 ],
                 buttonText: "Go Professional",
-                popular: true
+                color: "from-secondary-500 to-pink-600"
               },
               {
                 name: "Enterprise",
@@ -482,85 +699,65 @@ export default function Home() {
                   "24/7 priority support"
                 ],
                 buttonText: "Contact Sales",
-                popular: false
+                color: "from-primary-500 to-secondary-500"
               }
             ].map((tier, index) => (
-              <div 
+                            <div 
                 key={index}
-                className={`relative rounded-xl ${tier.popular ? 'border-2 border-secondary-600' : 'border border-light-400 dark:border-dark-600'} bg-light-100 dark:bg-dark-700 p-8 shadow-lg transform transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} hover:shadow-xl`}
+                className={`relative rounded-xl border border-light-400 dark:border-dark-600 bg-white dark:bg-dark-700 shadow-lg transform transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'} hover:shadow-xl overflow-hidden flex flex-col`}
                 style={{ transitionDelay: `${index * 150}ms` }}
               >
-                {tier.popular && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-secondary-600 text-light-100 px-4 py-2 rounded-full text-sm font-medium">
-                      Most Popular
-                    </span>
-                  </div>
-                )}
-                
-                <div className="text-center">
-                  <h3 className="text-xl font-bold text-primary-800 dark:text-light-100 mb-2">{tier.name}</h3>
-                  <div className="mb-4">
-                    <span className="text-4xl font-bold text-secondary-600">{tier.price}</span>
-                    <span className="text-primary-600 dark:text-light-400 ml-2">{tier.period}</span>
-                  </div>
-                  <p className="text-primary-600 dark:text-light-300 mb-6">{tier.description}</p>
+                {/* Decorative elements for all cards */}
+                <div className="absolute top-0 right-0 w-32 h-32 transform translate-x-16 -translate-y-16 opacity-10">
+                  <div className={`w-full h-full rounded-full bg-gradient-to-br ${tier.color}`}></div>
+                </div>
+                <div className="absolute bottom-0 left-0 w-24 h-24 transform -translate-x-12 translate-y-12 opacity-10">
+                  <div className={`w-full h-full rounded-full bg-gradient-to-tr ${tier.color}`}></div>
                 </div>
                 
-                <ul className="space-y-3 mb-8">
-                  {tier.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-secondary-600 mr-3" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                      <span className="text-primary-600 dark:text-light-300">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
+                {/* Card content */}
+                <div className="p-8 flex-grow flex flex-col">
+                  <div className="text-center relative z-1">
+                    <h3 className="text-xl font-bold text-primary-800 dark:text-light-100 mb-2">{tier.name}</h3>
+                    <div className="mb-4">
+                      <span className="text-4xl font-bold text-secondary-600">{tier.price}</span>
+                      <span className="text-primary-600 dark:text-light-400 ml-2">{tier.period}</span>
+                    </div>
+                    <p className="text-primary-600 dark:text-light-300 mb-6">{tier.description}</p>
+                  </div>
+                  
+                  <ul className="space-y-3 mb-auto">
+                    {tier.features.map((feature, featureIndex) => (
+                      <li key={featureIndex} className="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-secondary-600 mr-3 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-primary-600 dark:text-light-300">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
                 
-                <Link 
-                  href="/signup" 
-                  className={`w-full inline-flex justify-center py-3 px-4 border border-transparent rounded-full shadow-sm text-base font-medium ${tier.popular ? 'text-light-100 bg-secondary-600 hover:bg-secondary-700' : 'text-primary-800 dark:text-light-100 bg-light-300 dark:bg-dark-600 hover:bg-light-400 dark:hover:bg-dark-500'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary-500 transform transition-all duration-300 hover:scale-105`}
-                >
-                  {tier.buttonText}
-                </Link>
+                {/* Button section - fixed at bottom */}
+                <div className="p-8 pt-0 mt-4">
+                  <Link 
+                    href="/signup" 
+                    className={`w-full inline-flex justify-center py-4 px-6 border border-transparent rounded-full shadow-md text-base font-medium ${
+                        index === 0
+                          ? 'text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700'
+                          : index === 1
+                            ? 'text-white bg-gradient-to-r from-secondary-600 to-pink-600 hover:from-secondary-700 hover:to-pink-700'
+                            : 'text-white bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700'
+                        } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary-500 transform transition-all duration-300 hover:scale-105`}
+                  >
+                    {tier.buttonText}
+                  </Link>
+                </div>
               </div>
             ))}
           </div>
 
-          {/* Payment Process */}
-          <div className="bg-light-200 dark:bg-dark-700 rounded-xl p-8">
-            <h3 className="text-2xl font-bold text-primary-800 dark:text-light-100 text-center mb-8">
-              How Payments Work
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                {
-                  step: 1,
-                  title: "Escrow Creation",
-                  description: "Client funds are automatically locked in a smart contract when project starts"
-                },
-                {
-                  step: 2,
-                  title: "Work Completion",
-                  description: "Freelancer delivers work and requests payment through the platform"
-                },
-                {
-                  step: 3,
-                  title: "Automatic Release",
-                  description: "Funds are instantly released to freelancer upon client approval or timeout"
-                }
-              ].map((step, index) => (
-                <div key={index} className="text-center">
-                  <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-secondary-600 text-light-100 font-bold text-lg mb-4">
-                    {step.step}
-                  </div>
-                  <h4 className="text-lg font-medium text-primary-800 dark:text-light-100 mb-2">{step.title}</h4>
-                  <p className="text-primary-600 dark:text-light-300">{step.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+          
         </div>
       </div>
 
@@ -569,6 +766,23 @@ export default function Home() {
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-secondary-600/5 to-transparent"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,_rgba(120,119,198,0.1),_transparent_50%),radial-gradient(circle_at_80%_20%,_rgba(255,110,120,0.1),_transparent_50%)]"></div>
+        
+        {/* Back to Top Button */}
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="absolute top-4 right-4 md:top-6 md:right-6 z-10 group bg-secondary-600 hover:bg-secondary-700 text-light-100 p-3 rounded-full shadow-lg hover:shadow-xl transform transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-offset-2 focus:ring-offset-primary-900"
+          aria-label="Back to top"
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            className="h-5 w-5 transform group-hover:-translate-y-1 transition-transform duration-300" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+          </svg>
+        </button>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Main Footer Content - Compact */}
@@ -716,9 +930,10 @@ export default function Home() {
                   <button className="w-full px-4 py-3 bg-gradient-to-r from-secondary-600 to-secondary-700 hover:from-secondary-700 hover:to-secondary-800 text-light-100 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 text-sm">
                     Subscribe Now
                   </button>
-                  <div className="flex items-center justify-between text-xs text-light-400">
+                  <div className="flex items-center justify-evenly text-xs text-light-400 gap-x-2">
                     <span>✓ Weekly updates</span>
                     <span>✓ No spam</span>
+                    <span>✓ Easy opt-out</span>
                   </div>
                 </div>
               </div>
