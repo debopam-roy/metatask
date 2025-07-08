@@ -1,0 +1,82 @@
+# OWASP ZAP Security Scan Rules
+# Format: rule_id	threshold	action
+# Actions: IGNORE, INFO, WARN, FAIL
+# Thresholds: OFF, LOW, MEDIUM, HIGH
+
+# High priority security rules
+10021	MEDIUM	FAIL	# X-Content-Type-Options header missing
+10020	MEDIUM	FAIL	# X-Frame-Options header missing
+10016	MEDIUM	FAIL	# Web Browser XSS Protection not enabled
+10017	MEDIUM	FAIL	# Cross-Domain JavaScript source file inclusion
+10019	MEDIUM	FAIL	# Content-Type header missing
+10015	MEDIUM	FAIL	# Incomplete or no cache-control and pragma HTTP header set
+10023	MEDIUM	FAIL	# Information disclosure - debug error messages
+10024	MEDIUM	FAIL	# Information disclosure - sensitive information in URL
+10025	MEDIUM	FAIL	# Information disclosure - sensitive information in HTTP referrer header
+10026	MEDIUM	FAIL	# HTTP parameter override
+10027	MEDIUM	FAIL	# Information disclosure - suspicious comments
+10028	MEDIUM	FAIL	# Open redirect
+10029	MEDIUM	FAIL	# Cookie poisoning
+10030	MEDIUM	FAIL	# User controllable charset
+10031	MEDIUM	FAIL	# User controllable HTML element attribute (potential XSS)
+10032	MEDIUM	FAIL	# Viewstate scanner
+10033	MEDIUM	FAIL	# Directory browsing
+10034	MEDIUM	FAIL	# Heartbleed OpenSSL vulnerability
+10035	MEDIUM	FAIL	# Strict-Transport-Security header missing
+10036	MEDIUM	FAIL	# HTTP server response header scanner
+10037	MEDIUM	FAIL	# Server leaks information via "X-Powered-By" HTTP response header field(s)
+10038	MEDIUM	FAIL	# Content Security Policy (CSP) header not set
+10039	MEDIUM	FAIL	# X-Backend-Server header information leak
+10040	MEDIUM	FAIL	# Secure pages include mixed content
+10041	MEDIUM	FAIL	# HTTP to HTTPS insecure transition in form post
+10042	MEDIUM	FAIL	# HTTPS to HTTP insecure transition in form post
+10043	MEDIUM	FAIL	# User controllable JavaScript event (XSS)
+10044	MEDIUM	FAIL	# Big redirect response
+10045	MEDIUM	FAIL	# Source code disclosure - /WEB-INF folder
+10046	MEDIUM	FAIL	# Source code disclosure - CVE-2012-1823
+10047	MEDIUM	FAIL	# Source code disclosure - file inclusion
+10048	MEDIUM	FAIL	# Remote code execution - shell injection
+10049	MEDIUM	FAIL	# Source code disclosure - SQL injection
+10050	MEDIUM	FAIL	# Retrieved from cache
+10051	MEDIUM	FAIL	# Relative path confusion
+10052	MEDIUM	FAIL	# X-ChromeLogger-Data header information leak
+10053	MEDIUM	FAIL	# Apache range header DoS (CVE-2011-3192)
+10054	MEDIUM	FAIL	# Cookie without SameSite attribute
+10055	MEDIUM	FAIL	# CSP scanner
+10056	MEDIUM	FAIL	# X-Debug-Token information leak
+10057	MEDIUM	FAIL	# Username enumeration
+10058	MEDIUM	FAIL	# GET for POST
+10059	MEDIUM	FAIL	# X-AspNet-Version response header
+10060	MEDIUM	FAIL	# Source code disclosure - SVN
+10061	MEDIUM	FAIL	# Source code disclosure - Git
+10062	MEDIUM	FAIL	# PII disclosure
+10063	MEDIUM	FAIL	# Permissions policy header not set
+10096	MEDIUM	FAIL	# Timestamp disclosure
+10097	MEDIUM	FAIL	# Hash disclosure
+10098	MEDIUM	FAIL	# Cross-domain misconfiguration
+10099	MEDIUM	FAIL	# Source code disclosure
+
+# Medium priority rules (warnings)
+10003	LOW	WARN	# Vulnerable JS library
+10010	LOW	WARN	# Cookie no HttpOnly flag
+10011	LOW	WARN	# Cookie without secure flag
+10012	LOW	WARN	# Password autocomplete in browser
+10013	LOW	WARN	# Weak authentication method
+10014	LOW	WARN	# HTTP parameter pollution
+10018	LOW	WARN	# Content-Type header charset missing
+10022	LOW	WARN	# Information disclosure - database error messages
+
+# Low priority rules (info only)
+10001	OFF	INFO	# Unexpected content type
+10002	OFF	INFO	# Private IP disclosure
+10004	OFF	INFO	# Cross-domain JavaScript source file inclusion
+10005	OFF	INFO	# Charset mismatch
+10006	OFF	INFO	# Charset mismatch (header versus meta content-type charset)
+10007	OFF	INFO	# Charset mismatch (header versus meta equiv content-type charset)
+10008	OFF	INFO	# Charset mismatch (meta content-type charset versus meta charset)
+10009	OFF	INFO	# Charset mismatch (meta equiv content-type charset versus meta charset)
+
+# Ignore rules for development/testing
+90001	OFF	IGNORE	# Insecure HTTP method
+90002	OFF	IGNORE	# Private IP disclosure in development
+90003	OFF	IGNORE	# Development server headers 
